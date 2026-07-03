@@ -1,6 +1,8 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 mod db;
 mod state;
+mod models;
+mod utils;
 
 use state::AppState;
 use tauri::Manager;

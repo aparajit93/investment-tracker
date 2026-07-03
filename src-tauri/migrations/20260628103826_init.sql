@@ -3,8 +3,8 @@ CREATE TABLE portfolios (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
     base_currency TEXT NOT NULL,
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL
 );
 
 CREATE TABLE accounts (
@@ -19,8 +19,8 @@ CREATE TABLE accounts (
 
     is_active INTEGER NOT NULL DEFAULT 1,
 
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
 
     FOREIGN KEY (portfolio_id)
         REFERENCES portfolios(id)
@@ -41,8 +41,8 @@ CREATE TABLE assets (
 
     is_active INTEGER NOT NULL DEFAULT 1,
 
-    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
 
     UNIQUE(symbol, exchange)
 );
