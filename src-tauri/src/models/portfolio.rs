@@ -24,7 +24,7 @@ impl Portfolio {
     }
 
     fn validate_name(name: &str) -> Result<(), PortfolioError> {
-        if name.trim().is_empty() {
+        if name.is_empty() {
             return Err(PortfolioError::InvalidName);
         };
 
@@ -56,7 +56,7 @@ impl Portfolio {
             updated_at: time_stamp })
     }
 
-    pub fn rename (&mut self,name: &str) -> Result<(), PortfolioError> {
+    pub fn rename(&mut self,name: &str) -> Result<(), PortfolioError> {
         let name = name.trim();
         Self::validate_name(name)?;
 
@@ -66,7 +66,7 @@ impl Portfolio {
         Ok(())
     }
 
-    pub fn change_base_currency (&mut self, base_currency: &str) -> Result<(), PortfolioError> {
+    pub fn change_base_currency(&mut self, base_currency: &str) -> Result<(), PortfolioError> {
         let base_currency = base_currency.trim().to_uppercase();
 
         Self::validate_currency(&base_currency)?;
