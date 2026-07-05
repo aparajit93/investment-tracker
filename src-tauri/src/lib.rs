@@ -3,6 +3,7 @@ mod db;
 mod state;
 mod models;
 mod utils;
+mod repositories;
 
 use state::AppState;
 use tauri::Manager;
