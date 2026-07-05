@@ -1,5 +1,6 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
+  import { createPortfolio } from "../lib/api/portfolio";
 
   let name = $state("");
   let greetMsg = $state("");
@@ -9,6 +10,19 @@
     // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     greetMsg = await invoke("greet", { name });
   }
+
+  async function testCreatePortfolio() {
+    try {
+        await createPortfolio({
+            name: "Test Portfolio",
+            baseCurrency: "USD",
+        });
+
+        console.log("Portfolio created!");
+    } catch (err) {
+        console.error(err);
+    }
+}
 </script>
 
 <main class="container">
@@ -32,6 +46,8 @@
     <button type="submit">Greet</button>
   </form>
   <p>{greetMsg}</p>
+
+  <button onclick={testCreatePortfolio}>Create Test Portfolio</button>
 </main>
 
 <style>
