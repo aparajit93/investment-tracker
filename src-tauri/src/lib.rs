@@ -3,6 +3,8 @@ mod db;
 mod state;
 mod models;
 mod utils;
+mod repositories;
+mod commands;
 
 use state::AppState;
 use tauri::Manager;
@@ -16,7 +18,7 @@ fn greet(name: &str) -> String {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, commands::portfolio::create_portfolio])
         .setup(|app| {
             let app_handle = app.handle().clone();
 

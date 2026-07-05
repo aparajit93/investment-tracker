@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use crate::utils::now;
 use ulid::Ulid;
+use thiserror::Error;
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -12,9 +13,11 @@ pub struct Portfolio {
     pub updated_at: String,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum PortfolioError {
+    #[error("Portfolio Name cannot be empty.")]
     InvalidName,
+    #[error("Currency must be a 3-letter ISO code.")]
     InvalidCurrency,
 }
 
