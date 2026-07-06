@@ -18,7 +18,10 @@ fn greet(name: &str) -> String {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, commands::portfolio::create_portfolio])
+        .invoke_handler(tauri::generate_handler![greet, 
+            // PORTFOLIO
+            commands::portfolio::create_portfolio,
+            commands::portfolio::list_portfolios])
         .setup(|app| {
             let app_handle = app.handle().clone();
 

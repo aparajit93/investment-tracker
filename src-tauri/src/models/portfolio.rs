@@ -2,9 +2,10 @@ use serde::{Deserialize, Serialize};
 use crate::utils::now;
 use ulid::Ulid;
 use thiserror::Error;
+use sqlx::FromRow;
 
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 pub struct Portfolio {
     pub id: String,
     pub name: String,
