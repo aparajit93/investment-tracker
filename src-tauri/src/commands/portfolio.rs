@@ -8,3 +8,8 @@ pub async fn create_portfolio(state: State<'_, AppState>, name: String, base_cur
     repositories::portfolio::create(&state.db, &portfolio).await.map_err(|e| e.to_string())?;
     Ok(())
 }
+
+#[tauri::command]
+pub async fn list_portfolios(state: State<'_, AppState>) -> Result<Vec<Portfolio>, String> {
+  repositories::portfolio::list(&state.db).await.map_err(|e| e.to_string())
+}

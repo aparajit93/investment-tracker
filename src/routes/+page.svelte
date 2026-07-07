@@ -1,32 +1,54 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
-  import { createPortfolio } from "../lib/api/portfolio";
+  import { onMount } from "svelte";
+  import { createPortfolio, listPortfolios } from "../lib/api/portfolio";
+  import type { Portfolio } from "../lib/api/portfolio";
 
-  let name = $state("");
-  let greetMsg = $state("");
+  // let name = $state("");
+  // let greetMsg = $state("");
 
-  async function greet(event: Event) {
-    event.preventDefault();
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsg = await invoke("greet", { name });
+  let portfolios = $state<Portfolio[]>([]);
+
+  let portfolioName = $state("");
+  let baseCurrency = $state("USD");
+
+  let error = $state("");
+
+  // async function greet(event: Event) {
+  //   event.preventDefault();
+  //   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+  //   greetMsg = await invoke("greet", { name });
+  // }
+
+  async function loadPortfoilos() {
+    portfolios = await listPortfolios();
   }
 
-  async function testCreatePortfolio() {
+  async function createNewPortfolio() {
+    error = "";
+
     try {
         await createPortfolio({
-            name: "Test Portfolio",
-            baseCurrency: "USD",
+            name: portfolioName,
+            baseCurrency,
         });
-
-        console.log("Portfolio created!");
+        portfolioName = "";
+        await loadPortfoilos();
     } catch (err) {
-        console.error(err);
+        error = String(err);
     }
 }
+
+async function handlePortfolioSubmit(event:SubmitEvent) {
+  event.preventDefault();
+  await createNewPortfolio();
+}
+
+onMount(loadPortfoilos);
 </script>
 
 <main class="container">
-  <h1>Welcome to Tauri + Svelte</h1>
+  <!-- <h1>Welcome to Tauri + Svelte</h1>
 
   <div class="row">
     <a href="https://vite.dev" target="_blank">
@@ -45,9 +67,34 @@
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
     <button type="submit">Greet</button>
   </form>
-  <p>{greetMsg}</p>
+  <p>{greetMsg}</p> -->
 
-  <button onclick={testCreatePortfolio}>Create Test Portfolio</button>
+  <form onsubmit={handlePortfolioSubmit}>
+    <label>
+      Name
+      <input bind:value={portfolioName} required>
+    </label>
+
+    <label>
+      Base Currency
+      <input bind:value={baseCurrency} maxlength="3">
+    </label>
+
+    <button type="submit">Create Portfolio</button>
+  </form>
+
+  {#if error}
+    <p>{error}</p>
+  {/if}
+
+  <ul>
+    {#each portfolios as portfolio}
+        <li>
+          <strong>{portfolio.name}</strong>
+          ({portfolio.baseCurrency})
+        </li>
+    {/each}
+  </ul>
 </main>
 
 <style>

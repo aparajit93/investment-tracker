@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use crate::utils::now;
 use ulid::Ulid;
 use sqlx::Type;
+use chrono::{DateTime, Utc};
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Type)]
 #[sqlx(type_name="TEXT")]
@@ -14,6 +15,7 @@ pub enum AccountType {
 
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Account {
     pub id: String,
     pub portfolio_id: String,
@@ -22,8 +24,8 @@ pub struct Account {
     pub account_type: AccountType,
     pub currency: String,
     pub is_active: bool,
-    pub created_at: String,
-    pub updated_at: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -66,11 +68,11 @@ impl Account {
 
         Ok(
             Self { id: Ulid::new().to_string(),
-                 portfolio_id: portfolio_id.to_owned(),
-                 name: name.to_owned(), institution: institution,
-                 account_type, currency,
-                 is_active: true,
-                 created_at: time_stamp.clone(), updated_at: time_stamp }
+            portfolio_id: portfolio_id.to_owned(),
+            name: name.to_owned(), institution: institution,
+            account_type, currency,
+            is_active: true,
+            created_at: time_stamp, updated_at: time_stamp }
         )
 
     }

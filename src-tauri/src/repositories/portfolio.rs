@@ -14,3 +14,10 @@ pub async fn create(pool: &SqlitePool, portfolio: &Portfolio) -> Result<()> {
     .await?;    
     Ok(())
 }
+
+pub async fn list(pool: &SqlitePool) -> Result<Vec<Portfolio>, sqlx::Error> {
+    sqlx::query_as::<_, Portfolio>("SELECT 
+    id, name, base_currency, created_at, updated_at 
+    FROM portfolios 
+    ORDER BY created_at ASC").fetch_all(pool).await
+}
