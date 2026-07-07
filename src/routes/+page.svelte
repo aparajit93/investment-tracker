@@ -1,14 +1,22 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
-  import { createPortfolio } from "../lib/api/portfolio";
+  import { onMount } from "svelte";
+  import { createPortfolio, listPortfolios } from "../lib/api/portfolio";
+  import type { Portfolio } from "../lib/api/portfolio";
 
-  let name = $state("");
-  let greetMsg = $state("");
+  // let name = $state("");
+  // let greetMsg = $state("");
 
-  async function greet(event: Event) {
-    event.preventDefault();
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-    greetMsg = await invoke("greet", { name });
+  let portfolios = $state<Portfolio[]>([]);
+
+  // async function greet(event: Event) {
+  //   event.preventDefault();
+  //   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+  //   greetMsg = await invoke("greet", { name });
+  // }
+
+  async function loadPortfoilos() {
+    portfolios = await listPortfolios();
   }
 
   async function testCreatePortfolio() {
@@ -22,11 +30,15 @@
     } catch (err) {
         console.error(err);
     }
+
+    await loadPortfoilos();
 }
+
+onMount(loadPortfoilos);
 </script>
 
 <main class="container">
-  <h1>Welcome to Tauri + Svelte</h1>
+  <!-- <h1>Welcome to Tauri + Svelte</h1>
 
   <div class="row">
     <a href="https://vite.dev" target="_blank">
@@ -45,9 +57,15 @@
     <input id="greet-input" placeholder="Enter a name..." bind:value={name} />
     <button type="submit">Greet</button>
   </form>
-  <p>{greetMsg}</p>
+  <p>{greetMsg}</p> -->
 
   <button onclick={testCreatePortfolio}>Create Test Portfolio</button>
+
+  <ul>
+    {#each portfolios as portfolio}
+        <li>{portfolio.name} ({portfolio.baseCurrency})</li>
+    {/each}
+  </ul>
 </main>
 
 <style>

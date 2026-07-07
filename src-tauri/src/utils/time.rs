@@ -1,6 +1,6 @@
-use chrono::{SecondsFormat, Utc};
+use chrono::{SecondsFormat, Utc, DateTime};
 
-pub fn now() -> String {
-    Utc::now().to_rfc3339_opts(SecondsFormat::Secs, true)
+pub fn now() -> DateTime<Utc> {
+    Utc::now()
 }
 

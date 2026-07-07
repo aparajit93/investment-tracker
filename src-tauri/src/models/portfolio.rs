@@ -3,15 +3,16 @@ use crate::utils::now;
 use ulid::Ulid;
 use thiserror::Error;
 use sqlx::FromRow;
-
+use chrono::{DateTime, Utc};
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+#[serde(rename_all = "camelCase")]
 pub struct Portfolio {
     pub id: String,
     pub name: String,
     pub base_currency: String,
-    pub created_at: String,
-    pub updated_at: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Error)]
@@ -53,11 +54,13 @@ impl Portfolio {
 
         let time_stamp = now();
 
-        Ok(Self { id: Ulid::new().to_string(),
+        Ok(
+            Self { id: Ulid::new().to_string(),
             name: name.to_owned(),
             base_currency: base_currency,
-            created_at: time_stamp.clone(),
-            updated_at: time_stamp })
+            created_at: time_stamp,
+            updated_at: time_stamp }
+        )
     }
 
     pub fn rename(&mut self,name: &str) -> Result<(), PortfolioError> {
