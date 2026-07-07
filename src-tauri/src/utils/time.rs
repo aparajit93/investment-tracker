@@ -1,4 +1,4 @@
-use chrono::{SecondsFormat, Utc, DateTime};
+use chrono::{Utc, DateTime};
 
 pub fn now() -> DateTime<Utc> {
     Utc::now()

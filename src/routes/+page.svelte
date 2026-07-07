@@ -9,6 +9,11 @@
 
   let portfolios = $state<Portfolio[]>([]);
 
+  let portfolioName = $state("");
+  let baseCurrency = $state("USD");
+
+  let error = $state("");
+
   // async function greet(event: Event) {
   //   event.preventDefault();
   //   // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
@@ -19,19 +24,24 @@
     portfolios = await listPortfolios();
   }
 
-  async function testCreatePortfolio() {
+  async function createNewPortfolio() {
+    error = "";
+
     try {
         await createPortfolio({
-            name: "Test Portfolio",
-            baseCurrency: "USD",
+            name: portfolioName,
+            baseCurrency,
         });
-
-        console.log("Portfolio created!");
+        portfolioName = "";
+        await loadPortfoilos();
     } catch (err) {
-        console.error(err);
+        error = String(err);
     }
+}
 
-    await loadPortfoilos();
+async function handlePortfolioSubmit(event:SubmitEvent) {
+  event.preventDefault();
+  await createNewPortfolio();
 }
 
 onMount(loadPortfoilos);
@@ -59,11 +69,30 @@ onMount(loadPortfoilos);
   </form>
   <p>{greetMsg}</p> -->
 
-  <button onclick={testCreatePortfolio}>Create Test Portfolio</button>
+  <form onsubmit={handlePortfolioSubmit}>
+    <label>
+      Name
+      <input bind:value={portfolioName} required>
+    </label>
+
+    <label>
+      Base Currency
+      <input bind:value={baseCurrency} maxlength="3">
+    </label>
+
+    <button type="submit">Create Portfolio</button>
+  </form>
+
+  {#if error}
+    <p>{error}</p>
+  {/if}
 
   <ul>
     {#each portfolios as portfolio}
-        <li>{portfolio.name} ({portfolio.baseCurrency})</li>
+        <li>
+          <strong>{portfolio.name}</strong>
+          ({portfolio.baseCurrency})
+        </li>
     {/each}
   </ul>
 </main>
