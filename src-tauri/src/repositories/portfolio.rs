@@ -3,7 +3,7 @@ use sqlx::sqlite::SqlitePool;
 
 use crate::models::Portfolio;
 
-use super::error::RepositoryError;
+use super::RepositoryError;
 
 pub async fn create(pool: &SqlitePool, portfolio: &Portfolio) -> Result<()> {
     sqlx::query("INSERT INTO portfolios (id, name, base_currency, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)")
@@ -17,11 +17,13 @@ pub async fn create(pool: &SqlitePool, portfolio: &Portfolio) -> Result<()> {
     Ok(())
 }
 
-pub async fn list(pool: &SqlitePool) -> Result<Vec<Portfolio>, sqlx::Error> {
-    sqlx::query_as::<_, Portfolio>("SELECT 
+pub async fn list(pool: &SqlitePool) -> Result<Vec<Portfolio>, RepositoryError> {
+    let portfolios = sqlx::query_as::<_, Portfolio>("SELECT 
     id, name, base_currency, created_at, updated_at 
     FROM portfolios 
-    ORDER BY created_at ASC").fetch_all(pool).await
+    ORDER BY created_at ASC").fetch_all(pool).await?;
+
+    Ok(portfolios)
 }
 
 pub async fn update(pool: &SqlitePool, portfolio: &Portfolio) -> Result<(), RepositoryError> {
@@ -42,4 +44,16 @@ pub async fn update(pool: &SqlitePool, portfolio: &Portfolio) -> Result<(), Repo
     }
 
     Ok(())
+}
+
+pub async fn get_by_id(pool: &SqlitePool, id: &str) -> Result<Portfolio, RepositoryError> {
+    let portfolio = sqlx::query_as::<_, Portfolio>("SELECT 
+    id, name, base_currency, created_at, updated_at 
+    FROM portfolios 
+    WHERE id = $1").bind(id).fetch_optional(pool).await?;
+
+    match portfolio {
+        Some(portfolio) => Ok(portfolio),
+        None => Err(RepositoryError::NotFound)
+    }
 }

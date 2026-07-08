@@ -1,2 +1,4 @@
-pub mod error;
+mod error;
 pub mod portfolio;
+
+pub use error::RepositoryError;

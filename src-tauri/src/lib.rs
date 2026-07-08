@@ -21,7 +21,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![greet, 
             // PORTFOLIO
             commands::portfolio::create_portfolio,
-            commands::portfolio::list_portfolios])
+            commands::portfolio::list_portfolios,
+            commands::portfolio::rename_portfolio])
         .setup(|app| {
             let app_handle = app.handle().clone();
 
