@@ -1,16 +1,21 @@
 import { invoke } from "@tauri-apps/api/core";
 
-export interface CreatePortfolioRequest {
-    name: string,
-    baseCurrency: string
+export interface Portfolio {
+    id: string;
+    name: string;
+    baseCurrency: string;
+    createdAt: string;
+    updatedAt: string;
 }
 
-export interface Portfolio {
-    id: string,
-    name: string,
-    baseCurrency: string,
-    createdAt: string,
-    updatedAt: string
+export interface CreatePortfolioRequest {
+    name: string;
+    baseCurrency: string;
+}
+
+export interface RenamePortfolioRequest {
+    id: string;
+    name: string;
 }
 
 export async function createPortfolio(request: CreatePortfolioRequest) {
@@ -19,4 +24,8 @@ export async function createPortfolio(request: CreatePortfolioRequest) {
 
 export async function listPortfolios() {
     return await invoke<Portfolio[]>("list_portfolios");
+}
+
+export async function renamePortfolio(request:RenamePortfolioRequest) {
+    await invoke("rename_portfolio", {id: request.id, name: request.name});
 }
