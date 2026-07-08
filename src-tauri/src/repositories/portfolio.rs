@@ -5,7 +5,7 @@ use crate::models::Portfolio;
 
 use super::RepositoryError;
 
-pub async fn create(pool: &SqlitePool, portfolio: &Portfolio) -> Result<()> {
+pub async fn create(pool: &SqlitePool, portfolio: &Portfolio) -> Result<(), RepositoryError> {
     sqlx::query("INSERT INTO portfolios (id, name, base_currency, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)")
     .bind(&portfolio.id)
     .bind(&portfolio.name)
