@@ -10,28 +10,34 @@ pub async fn create(pool: &SqlitePool, portfolio: &Portfolio) -> Result<()> {
     .bind(&portfolio.id)
     .bind(&portfolio.name)
     .bind(&portfolio.base_currency)
-    .bind(&portfolio.created_at)
-    .bind(&portfolio.updated_at)
+    .bind(portfolio.created_at)
+    .bind(portfolio.updated_at)
     .execute(pool)
-    .await?;    
+    .await?;
     Ok(())
 }
 
 pub async fn list(pool: &SqlitePool) -> Result<Vec<Portfolio>, RepositoryError> {
-    let portfolios = sqlx::query_as::<_, Portfolio>("SELECT 
+    let portfolios = sqlx::query_as::<_, Portfolio>(
+        "SELECT 
     id, name, base_currency, created_at, updated_at 
     FROM portfolios 
-    ORDER BY created_at ASC").fetch_all(pool).await?;
+    ORDER BY created_at ASC",
+    )
+    .fetch_all(pool)
+    .await?;
 
     Ok(portfolios)
 }
 
 pub async fn update(pool: &SqlitePool, portfolio: &Portfolio) -> Result<(), RepositoryError> {
-    let result = sqlx::query("UPDATE portfolios
+    let result = sqlx::query(
+        "UPDATE portfolios
     SET name = $1,
         base_currency = $2,
         updated_at = $3
-    WHERE id = $4")
+    WHERE id = $4",
+    )
     .bind(&portfolio.name)
     .bind(&portfolio.base_currency)
     .bind(portfolio.updated_at)
@@ -47,13 +53,18 @@ pub async fn update(pool: &SqlitePool, portfolio: &Portfolio) -> Result<(), Repo
 }
 
 pub async fn get_by_id(pool: &SqlitePool, id: &str) -> Result<Portfolio, RepositoryError> {
-    let portfolio = sqlx::query_as::<_, Portfolio>("SELECT 
+    let portfolio = sqlx::query_as::<_, Portfolio>(
+        "SELECT 
     id, name, base_currency, created_at, updated_at 
     FROM portfolios 
-    WHERE id = $1").bind(id).fetch_optional(pool).await?;
+    WHERE id = $1",
+    )
+    .bind(id)
+    .fetch_optional(pool)
+    .await?;
 
     match portfolio {
         Some(portfolio) => Ok(portfolio),
-        None => Err(RepositoryError::NotFound)
+        None => Err(RepositoryError::NotFound),
     }
 }

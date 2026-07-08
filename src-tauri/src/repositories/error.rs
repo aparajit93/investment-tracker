@@ -6,5 +6,5 @@ pub enum RepositoryError {
     Database(#[from] sqlx::Error),
 
     #[error("Entity Not Found")]
-    NotFound
+    NotFound,
 }

@@ -1,9 +1,9 @@
-use serde::{Deserialize, Serialize};
 use crate::utils::now;
-use ulid::Ulid;
-use thiserror::Error;
-use sqlx::FromRow;
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+use thiserror::Error;
+use ulid::Ulid;
 
 #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 #[serde(rename_all = "camelCase")]
@@ -44,8 +44,7 @@ impl Portfolio {
         Ok(())
     }
 
-    pub fn new (name: &str, base_currency: &str) -> Result<Self, PortfolioError> {
-
+    pub fn new(name: &str, base_currency: &str) -> Result<Self, PortfolioError> {
         let name = name.trim();
         let base_currency = base_currency.trim().to_uppercase();
 
@@ -54,16 +53,16 @@ impl Portfolio {
 
         let time_stamp = now();
 
-        Ok(
-            Self { id: Ulid::new().to_string(),
+        Ok(Self {
+            id: Ulid::new().to_string(),
             name: name.to_owned(),
-            base_currency: base_currency,
+            base_currency,
             created_at: time_stamp,
-            updated_at: time_stamp }
-        )
+            updated_at: time_stamp,
+        })
     }
 
-    pub fn rename(&mut self,name: &str) -> Result<(), PortfolioError> {
+    pub fn rename(&mut self, name: &str) -> Result<(), PortfolioError> {
         let name = name.trim();
         Self::validate_name(name)?;
 
@@ -83,5 +82,4 @@ impl Portfolio {
 
         Ok(())
     }
-
 }

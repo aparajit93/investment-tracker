@@ -1,10 +1,10 @@
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-mod db;
-mod state;
-mod models;
-mod utils;
-mod repositories;
 mod commands;
+mod db;
+mod models;
+mod repositories;
+mod state;
+mod utils;
 
 use state::AppState;
 use tauri::Manager;
@@ -18,18 +18,22 @@ fn greet(name: &str) -> String {
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, 
+        .invoke_handler(tauri::generate_handler![
+            greet,
             // PORTFOLIO
             commands::portfolio::create_portfolio,
             commands::portfolio::list_portfolios,
-            commands::portfolio::rename_portfolio])
+            commands::portfolio::rename_portfolio
+        ])
         .setup(|app| {
             let app_handle = app.handle().clone();
 
             tauri::async_runtime::block_on(async move {
-                let pool = db::initialize(&app_handle).await.expect("Database Creation Failed");
+                let pool = db::initialize(&app_handle)
+                    .await
+                    .expect("Database Creation Failed");
 
-                app.manage(AppState { db: pool});
+                app.manage(AppState { db: pool });
             });
 
             Ok(())

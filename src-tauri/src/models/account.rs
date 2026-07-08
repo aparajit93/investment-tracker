@@ -1,18 +1,17 @@
-use serde::{Deserialize, Serialize};
 use crate::utils::now;
-use ulid::Ulid;
-use sqlx::Type;
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
+use sqlx::Type;
+use ulid::Ulid;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Type)]
-#[sqlx(type_name="TEXT")]
+#[sqlx(type_name = "TEXT")]
 pub enum AccountType {
     Brokerage,
     Chequing,
     Cash,
     Savings,
 }
-
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -35,7 +34,6 @@ pub enum AccountError {
 }
 
 impl Account {
-
     fn touch(&mut self) {
         self.updated_at = now();
     }
@@ -56,28 +54,39 @@ impl Account {
         Ok(())
     }
 
-    pub fn new(portfolio_id: &str, name: &str, institution: Option<&str>, account_type: AccountType, currency: &str) -> Result<Self, AccountError> {
+    pub fn new(
+        portfolio_id: &str,
+        name: &str,
+        institution: Option<&str>,
+        account_type: AccountType,
+        currency: &str,
+    ) -> Result<Self, AccountError> {
         let name = name.trim();
         let currency = currency.trim().to_uppercase();
-        let institution = institution.map(str::trim).filter(|s| !s.is_empty()).map(str::to_owned);
+        let institution = institution
+            .map(str::trim)
+            .filter(|s| !s.is_empty())
+            .map(str::to_owned);
 
         Self::validate_name(name)?;
         Self::validate_currency(&currency)?;
 
         let time_stamp = now();
 
-        Ok(
-            Self { id: Ulid::new().to_string(),
+        Ok(Self {
+            id: Ulid::new().to_string(),
             portfolio_id: portfolio_id.to_owned(),
-            name: name.to_owned(), institution: institution,
-            account_type, currency,
+            name: name.to_owned(),
+            institution,
+            account_type,
+            currency,
             is_active: true,
-            created_at: time_stamp, updated_at: time_stamp }
-        )
-
+            created_at: time_stamp,
+            updated_at: time_stamp,
+        })
     }
 
-    pub fn rename(&mut self,name: &str) -> Result<(), AccountError> {
+    pub fn rename(&mut self, name: &str) -> Result<(), AccountError> {
         let name = name.trim();
         Self::validate_name(name)?;
 
@@ -98,8 +107,11 @@ impl Account {
         Ok(())
     }
 
-    pub fn change_institution(&mut self,institution: Option<&str>) {
-        let institution = institution.map(str::trim).filter(|s| !s.is_empty()).map(str::to_owned);
+    pub fn change_institution(&mut self, institution: Option<&str>) {
+        let institution = institution
+            .map(str::trim)
+            .filter(|s| !s.is_empty())
+            .map(str::to_owned);
 
         self.institution = institution;
         self.touch();
@@ -119,5 +131,4 @@ impl Account {
         self.is_active = true;
         self.touch();
     }
-
 }
