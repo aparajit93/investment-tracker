@@ -68,3 +68,13 @@ pub async fn get_by_id(pool: &SqlitePool, id: &str) -> Result<Portfolio, Reposit
         None => Err(RepositoryError::NotFound),
     }
 }
+
+pub async fn delete(pool: &SqlitePool, id: &str) -> Result<(), RepositoryError> {
+    let result = sqlx::query("DELETE FROM portfolios WHERE id=$1").bind(id).execute(pool).await?;
+
+    if result.rows_affected() == 0 {
+        return Err(RepositoryError::NotFound);
+    }
+
+    Ok(())
+}

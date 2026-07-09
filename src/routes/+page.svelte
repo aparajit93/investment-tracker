@@ -1,7 +1,7 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
   import { onMount } from "svelte";
-  import { createPortfolio, listPortfolios, renamePortfolio } from "../lib/api/portfolio";
+  import { createPortfolio, listPortfolios, renamePortfolio, deletePortfolio } from "../lib/api/portfolio";
   import type { Portfolio } from "../lib/api/portfolio";
 
   // let name = $state("");
@@ -52,6 +52,16 @@
     const first = portfolios[0];
 
     await renamePortfolio({id: first.id, name: `${first.name}_updated`});
+
+    await loadPortfoilos();
+  }
+
+  async function deleteFirstPortfolio() {
+    if (portfolios.length == 0) {
+      return;
+    }
+
+    await deletePortfolio(portfolios[0].id);
 
     await loadPortfoilos();
   }
@@ -110,6 +120,10 @@
 
   <button onclick={renameFirstPortfolio}>
     Rename First Portfolio
+  </button>
+
+  <button onclick={deleteFirstPortfolio}>
+    Delete First Portfolio
   </button>
 </main>
 

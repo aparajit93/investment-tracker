@@ -50,3 +50,14 @@ pub async fn rename_portfolio(
 
     Ok(())
 }
+
+#[tauri::command]
+pub async fn delete_portfolio(state: State<'_, AppState>, id: String) -> Result<(), String> {
+    repositories::portfolio::delete(&state.db, &id)
+    .await
+    .map_err(|e| match e {
+            RepositoryError::NotFound => "Portfolio Not Found".to_string(),
+            RepositoryError::Database(err) => err.to_string(),
+        })?;
+  Ok(())
+}
