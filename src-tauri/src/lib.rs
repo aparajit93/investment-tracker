@@ -23,7 +23,8 @@ pub fn run() {
             // PORTFOLIO
             commands::portfolio::create_portfolio,
             commands::portfolio::list_portfolios,
-            commands::portfolio::rename_portfolio
+            commands::portfolio::rename_portfolio,
+            commands::portfolio::delete_portfolio
         ])
         .setup(|app| {
             let app_handle = app.handle().clone();

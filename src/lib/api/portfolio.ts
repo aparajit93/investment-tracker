@@ -29,3 +29,7 @@ export async function listPortfolios() {
 export async function renamePortfolio(request:RenamePortfolioRequest) {
     await invoke("rename_portfolio", {id: request.id, name: request.name});
 }
+
+export async function deletePortfolio(id:string) {
+    await invoke("delete_portfolio", { id });
+}
