@@ -1,7 +1,7 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/core";
   import { onMount } from "svelte";
-  import { createPortfolio, listPortfolios, renamePortfolio, deletePortfolio } from "../lib/api/portfolio";
+  import { createPortfolio, listPortfolios, renamePortfolio, deletePortfolio, changePortfolioBaseCurrency } from "../lib/api/portfolio";
   import type { Portfolio } from "../lib/api/portfolio";
 
   // let name = $state("");
@@ -20,7 +20,7 @@
   //   greetMsg = await invoke("greet", { name });
   // }
 
-  async function loadPortfoilos() {
+  async function loadPortfolios() {
     portfolios = await listPortfolios();
   }
 
@@ -33,7 +33,7 @@
             baseCurrency,
         });
         portfolioName = "";
-        await loadPortfoilos();
+        await loadPortfolios();
     } catch (err) {
         error = String(err);
     }
@@ -53,7 +53,19 @@
 
     await renamePortfolio({id: first.id, name: `${first.name}_updated`});
 
-    await loadPortfoilos();
+    await loadPortfolios();
+  }
+
+  async function changeFirstPortfolioBaseCurrency() {
+    if (portfolios.length == 0) {
+      return;
+    }
+
+    const first = portfolios[0];
+
+    await changePortfolioBaseCurrency({id: first.id, baseCurrency: "CAD"});
+
+    await loadPortfolios();
   }
 
   async function deleteFirstPortfolio() {
@@ -63,10 +75,10 @@
 
     await deletePortfolio(portfolios[0].id);
 
-    await loadPortfoilos();
+    await loadPortfolios();
   }
 
-  onMount(loadPortfoilos);
+  onMount(loadPortfolios);
 </script>
 
 <main class="container">
@@ -120,6 +132,10 @@
 
   <button onclick={renameFirstPortfolio}>
     Rename First Portfolio
+  </button>
+
+  <button onclick={changeFirstPortfolioBaseCurrency}>
+    Change First Portfolio Base Currency
   </button>
 
   <button onclick={deleteFirstPortfolio}>

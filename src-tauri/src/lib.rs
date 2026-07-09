@@ -24,6 +24,7 @@ pub fn run() {
             commands::portfolio::create_portfolio,
             commands::portfolio::list_portfolios,
             commands::portfolio::rename_portfolio,
+            commands::portfolio::change_portfolio_base_currency,
             commands::portfolio::delete_portfolio
         ])
         .setup(|app| {

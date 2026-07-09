@@ -18,6 +18,11 @@ export interface RenamePortfolioRequest {
     name: string;
 }
 
+export interface ChangePortfolioBaseCurrencyRequest {
+    id: string;
+    baseCurrency: string;
+}
+
 export async function createPortfolio(request: CreatePortfolioRequest) {
     await invoke("create_portfolio", {name: request.name, baseCurrency: request.baseCurrency});
 }
@@ -28,6 +33,10 @@ export async function listPortfolios() {
 
 export async function renamePortfolio(request:RenamePortfolioRequest) {
     await invoke("rename_portfolio", {id: request.id, name: request.name});
+}
+
+export async function changePortfolioBaseCurrency(request:ChangePortfolioBaseCurrencyRequest) {
+    await invoke("change_portfolio_base_currency", {id: request.id, baseCurrency: request.baseCurrency});
 }
 
 export async function deletePortfolio(id:string) {
