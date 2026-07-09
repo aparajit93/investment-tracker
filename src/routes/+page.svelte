@@ -24,7 +24,9 @@
     portfolios = await listPortfolios();
   }
 
-  async function createNewPortfolio() {
+  async function handlePortfolioSubmit(event:SubmitEvent) {
+    event.preventDefault();
+
     error = "";
 
     try {
@@ -39,41 +41,36 @@
     }
   }
 
-  async function handlePortfolioSubmit(event:SubmitEvent) {
-    event.preventDefault();
-    await createNewPortfolio();
-  }
+  // async function renameFirstPortfolio() {
+  //   if (portfolios.length == 0) {
+  //     return;
+  //   }
 
-  async function renameFirstPortfolio() {
+  //   const first = portfolios[0];
+
+  //   await renamePortfolio({id: first.id, name: `${first.name}_updated`});
+
+  //   await loadPortfolios();
+  // }
+
+  // async function changeFirstPortfolioBaseCurrency() {
+  //   if (portfolios.length == 0) {
+  //     return;
+  //   }
+
+  //   const first = portfolios[0];
+
+  //   await changePortfolioBaseCurrency({id: first.id, baseCurrency: "CAD"});
+
+  //   await loadPortfolios();
+  // }
+
+  async function handleDeletePortfolio(id: string) {
     if (portfolios.length == 0) {
       return;
     }
 
-    const first = portfolios[0];
-
-    await renamePortfolio({id: first.id, name: `${first.name}_updated`});
-
-    await loadPortfolios();
-  }
-
-  async function changeFirstPortfolioBaseCurrency() {
-    if (portfolios.length == 0) {
-      return;
-    }
-
-    const first = portfolios[0];
-
-    await changePortfolioBaseCurrency({id: first.id, baseCurrency: "CAD"});
-
-    await loadPortfolios();
-  }
-
-  async function deleteFirstPortfolio() {
-    if (portfolios.length == 0) {
-      return;
-    }
-
-    await deletePortfolio(portfolios[0].id);
+    await deletePortfolio(id);
 
     await loadPortfolios();
   }
@@ -103,7 +100,10 @@
   </form>
   <p>{greetMsg}</p> -->
 
-  <form onsubmit={handlePortfolioSubmit}>
+  <h1>PORTFOLIO MANAGEMENT</h1>
+  <section>
+    <h2> Create Portfolio </h2>
+    <form onsubmit={handlePortfolioSubmit}>
     <label>
       Name
       <input bind:value={portfolioName} required>
@@ -116,21 +116,42 @@
 
     <button type="submit">Create Portfolio</button>
   </form>
-
   {#if error}
     <p>{error}</p>
   {/if}
+  </section>
+  
+  <section>
+    <h2>Portfolios</h2>
+    <table>
 
-  <ul>
-    {#each portfolios as portfolio}
-        <li>
-          <strong>{portfolio.name}</strong>
-          ({portfolio.baseCurrency})
-        </li>
-    {/each}
-  </ul>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Base Currency</th>
+          <th>Created At</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
 
-  <button onclick={renameFirstPortfolio}>
+      <tbody>
+        {#each portfolios as portfolio}
+          <tr>
+            <td>{portfolio.name}</td>
+            <td>{portfolio.baseCurrency}</td>
+            <td>{portfolio.createdAt}</td>
+            <td>
+              <button>Edit</button>
+              <button onclick={() => handleDeletePortfolio(portfolio.id)}>Delete</button>
+            </td>
+          </tr>
+          
+        {/each}
+      </tbody>
+    </table>
+  </section>
+
+  <!-- <button onclick={renameFirstPortfolio}>
     Rename First Portfolio
   </button>
 
@@ -140,7 +161,7 @@
 
   <button onclick={deleteFirstPortfolio}>
     Delete First Portfolio
-  </button>
+  </button> -->
 </main>
 
 <style>
