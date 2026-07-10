@@ -1,3 +1,4 @@
+pub mod account;
 mod error;
 pub mod portfolio;
 
