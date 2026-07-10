@@ -1,8 +1,11 @@
 use crate::utils::now;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::Type;
+use sqlx::{FromRow, Type};
+use thiserror::Error;
 use ulid::Ulid;
+
+use std::str::FromStr;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Type)]
 #[sqlx(type_name = "TEXT")]
@@ -13,7 +16,21 @@ pub enum AccountType {
     Savings,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+impl FromStr for AccountType {
+    type Err = &'static str;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "Brokerage" => Ok(AccountType::Brokerage),
+            "Chequing" => Ok(AccountType::Chequing),
+            "Cash" => Ok(AccountType::Cash),
+            "Savings" => Ok(AccountType::Savings),
+            _ => Err("Invalid Account Type"),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
 #[serde(rename_all = "camelCase")]
 pub struct Account {
     pub id: String,
@@ -27,9 +44,11 @@ pub struct Account {
     pub updated_at: DateTime<Utc>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Error)]
 pub enum AccountError {
+    #[error("Account Name cannot be empty.")]
     InvalidName,
+    #[error("Currency must be a 3-letter ISO code.")]
     InvalidCurrency,
 }
 

@@ -25,7 +25,17 @@ pub fn run() {
             commands::portfolio::list_portfolios,
             commands::portfolio::rename_portfolio,
             commands::portfolio::change_portfolio_base_currency,
-            commands::portfolio::delete_portfolio
+            commands::portfolio::delete_portfolio,
+            // ACCOUNT
+            commands::account::create_account,
+            commands::account::list_accounts,
+            commands::account::rename_account,
+            commands::account::change_account_currency,
+            commands::account::change_account_institution,
+            commands::account::change_account_type,
+            commands::account::activate_account,
+            commands::account::deactivate_account,
+            commands::account::delete_account
         ])
         .setup(|app| {
             let app_handle = app.handle().clone();

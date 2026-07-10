@@ -64,7 +64,9 @@ pub async fn change_portfolio_base_currency(
             RepositoryError::Database(err) => err.to_string(),
         })?;
 
-    portfolio.change_base_currency(&base_currency).map_err(|e| e.to_string())?;
+    portfolio
+        .change_base_currency(&base_currency)
+        .map_err(|e| e.to_string())?;
 
     repositories::portfolio::update(&state.db, &portfolio)
         .await
@@ -79,10 +81,10 @@ pub async fn change_portfolio_base_currency(
 #[tauri::command]
 pub async fn delete_portfolio(state: State<'_, AppState>, id: String) -> Result<(), String> {
     repositories::portfolio::delete(&state.db, &id)
-    .await
-    .map_err(|e| match e {
+        .await
+        .map_err(|e| match e {
             RepositoryError::NotFound => "Portfolio Not Found".to_string(),
             RepositoryError::Database(err) => err.to_string(),
         })?;
-  Ok(())
+    Ok(())
 }
