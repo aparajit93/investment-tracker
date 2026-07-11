@@ -3,11 +3,24 @@
   import { onMount } from "svelte";
   import { createPortfolio, listPortfolios, renamePortfolio, deletePortfolio, changePortfolioBaseCurrency } from "../lib/api/portfolio";
   import type { Portfolio } from "../lib/api/portfolio";
+  import {
+    AccountType, 
+    createAccount, 
+    listAccounts, 
+    renameAccount, 
+    changeAccountCurrency, 
+    changeAccountInstitution, 
+    changeAccountType, 
+    deactivateAccount,
+    activateAccount,
+    deleteAccount} from "$lib/api/account";
+  import type { Account } from "$lib/api/account";
 
   // let name = $state("");
   // let greetMsg = $state("");
 
   let portfolios = $state<Portfolio[]>([]);
+  let accounts = $state<Account[]>([]);
 
   let portfolioName = $state("");
   let baseCurrency = $state("USD");
@@ -22,6 +35,14 @@
 
   async function loadPortfolios() {
     portfolios = await listPortfolios();
+  }
+
+  async function mountLoad() {
+    portfolios = await listPortfolios();
+    accounts = await listAccounts(portfolios[0].id);
+  }
+  async function loadAccounts() {
+    accounts = await listAccounts(portfolios[0].id);
   }
 
   async function handlePortfolioSubmit(event:SubmitEvent) {
@@ -41,30 +62,6 @@
     }
   }
 
-  // async function renameFirstPortfolio() {
-  //   if (portfolios.length == 0) {
-  //     return;
-  //   }
-
-  //   const first = portfolios[0];
-
-  //   await renamePortfolio({id: first.id, name: `${first.name}_updated`});
-
-  //   await loadPortfolios();
-  // }
-
-  // async function changeFirstPortfolioBaseCurrency() {
-  //   if (portfolios.length == 0) {
-  //     return;
-  //   }
-
-  //   const first = portfolios[0];
-
-  //   await changePortfolioBaseCurrency({id: first.id, baseCurrency: "CAD"});
-
-  //   await loadPortfolios();
-  // }
-
   async function handleDeletePortfolio(id: string) {
     if (portfolios.length == 0) {
       return;
@@ -75,7 +72,111 @@
     await loadPortfolios();
   }
 
-  onMount(loadPortfolios);
+  // ACCOUNT TESTING
+
+    async function handleAccountSubmit() {
+    // event.preventDefault();
+
+    // error = "";
+
+    try {
+        await createAccount({
+          portfolioId: portfolios[0].id, 
+          name: "TEST", 
+          institution: "TRIAL", 
+          accountType: AccountType.Brokerage, 
+          currency: "USD"
+        });
+        await loadAccounts();
+    } catch (err) {
+        error = String(err);
+    }
+  }
+
+  async function renameFirstAccount() {
+    if (accounts.length == 0) {
+      return;
+    }
+
+    const first = accounts[0];
+
+    await renameAccount({id: first.id, name: `${first.name}_updated`});
+
+    await loadAccounts();
+  }
+
+  async function changeFirstAccountCurrency() {
+    if (accounts.length == 0) {
+      return;
+    }
+
+    const first = accounts[0];
+
+    await changeAccountCurrency({id: first.id, currency: "CAD"});
+
+    await loadAccounts();
+  }
+
+  async function changeFirstAccountInstitution() {
+    if (accounts.length == 0) {
+      return;
+    }
+
+    const first = accounts[0];
+
+    await changeAccountInstitution({id: first.id, institution: "BANK"});
+
+    await loadAccounts();
+  }
+
+  async function changeFirstAccountType() {
+    if (accounts.length == 0) {
+      return;
+    }
+
+    const first = accounts[0];
+
+    await changeAccountType({id: first.id, accountType: AccountType.Savings});
+
+    await loadAccounts();
+  }
+
+  async function deactivateFirstAccount() {
+    if (accounts.length == 0) {
+      return;
+    }
+
+    const first = accounts[0];
+
+    await deactivateAccount(first.id);
+
+    await loadAccounts();
+  }
+
+  async function activateFirstAccount() {
+    if (accounts.length == 0) {
+      return;
+    }
+
+    const first = accounts[0];
+
+    await activateAccount(first.id);
+
+    await loadAccounts();
+  }
+
+  async function deleteFirstAccount() {
+    if (portfolios.length == 0) {
+      return;
+    }
+
+    await deleteAccount(accounts[0].id);
+
+    await loadAccounts();
+  }
+
+  // onMount(loadPortfolios);
+  onMount(mountLoad);
 </script>
 
 <main class="container">
@@ -151,17 +252,45 @@
     </table>
   </section>
 
-  <!-- <button onclick={renameFirstPortfolio}>
-    Rename First Portfolio
+  <h1>ACCOUNT MANAGEMENT</h1>
+  <button onclick={handleAccountSubmit}>Create Acccount</button>
+  <ul>
+    {#each accounts as account}
+      <li>{account.name}</li>
+      <li>{account.institution}</li>
+      <li>{account.accountType}</li>
+      <li>{account.currency}</li>
+      <li>{account.isActive}</li>
+    {/each}
+  </ul>
+
+  <button onclick={renameFirstAccount}>
+    Rename First Account
   </button>
 
-  <button onclick={changeFirstPortfolioBaseCurrency}>
-    Change First Portfolio Base Currency
+  <button onclick={changeFirstAccountCurrency}>
+    Change First Account Currency
   </button>
 
-  <button onclick={deleteFirstPortfolio}>
-    Delete First Portfolio
-  </button> -->
+  <button onclick={changeFirstAccountInstitution}>
+    Change First Account Institution
+  </button>
+
+  <button onclick={changeFirstAccountType}>
+    Change First Account Type
+  </button>
+
+  <button onclick={deactivateFirstAccount}>
+    Deactivate First Account
+  </button>
+
+  <button onclick={activateFirstAccount}>
+    Activate First Account
+  </button>
+
+  <button onclick={deleteFirstAccount}>
+    Delete First Account
+  </button>
 </main>
 
 <style>
