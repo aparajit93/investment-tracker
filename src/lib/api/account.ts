@@ -66,15 +66,15 @@ export async function renameAccount(request:RenameAccountRequest) {
 }
 
 export async function changeAccountCurrency(request:ChangeAccountCurrencyRequest) {
-    await invoke("change_account_currency", { id: request.id, name: request.currency });
+    await invoke("change_account_currency", { id: request.id, currency: request.currency });
 }
 
 export async function changeAccountInstitution(request:ChangeAccountInstitutionRequest) {
-    await invoke("change_account_institution", { id: request.id, name: request.institution });
+    await invoke("change_account_institution", { id: request.id, institution: request.institution });
 }
 
 export async function changeAccountType(request:ChangeAccountTypeRequest) {
-    await invoke("change_account_type", { id: request.id, name: request.accountType });
+    await invoke("change_account_type", { id: request.id, accountType: request.accountType });
 }
 
 export async function activateAccount(id:string) {
@@ -83,4 +83,8 @@ export async function activateAccount(id:string) {
 
 export async function deactivateAccount(id:string) {
     await invoke("deactivate_account", { id: id });
+}
+
+export async function deleteAccount(id:string) {
+    await invoke("delete_account", { id });
 }
