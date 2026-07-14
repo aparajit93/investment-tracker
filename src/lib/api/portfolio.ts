@@ -42,3 +42,7 @@ export async function changePortfolioBaseCurrency(request:ChangePortfolioBaseCur
 export async function deletePortfolio(id:string) {
     await invoke("delete_portfolio", { id });
 }
+
+export async function getPortfolio(id:string) {
+    return await invoke<Portfolio>("get_portfolio", { id })
+}
