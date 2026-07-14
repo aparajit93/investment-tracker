@@ -5,13 +5,13 @@
 	const { children } = $props();
 </script>
 
-{@render children()}
+<!-- {@render children()} -->
 
 <div class="app">
 	<Sidebar />
 
 	<main>
-		Hello
+		{@render children()}
 	</main>
 </div>
 

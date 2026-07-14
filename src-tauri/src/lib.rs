@@ -26,6 +26,7 @@ pub fn run() {
             commands::portfolio::rename_portfolio,
             commands::portfolio::change_portfolio_base_currency,
             commands::portfolio::delete_portfolio,
+            commands::portfolio::get_portfolio,
             // ACCOUNT
             commands::account::create_account,
             commands::account::list_accounts,

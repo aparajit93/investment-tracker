@@ -13,7 +13,7 @@
         </ul>
     </nav>
     <hr>
-    <div class="sidebar-footer"><p>Profile</p></div>
+    <div class="sidebar-footer"><a href="/profile">Profile</a></div>
 </aside>
 
 <style>
