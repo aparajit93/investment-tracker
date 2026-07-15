@@ -6,7 +6,10 @@
 </script>
 
 <!-- {@render children()} -->
-<div class="app"><Sidebar /><main>{@render children()}</main></div>
+<div class="app">
+	<Sidebar />
+	<main>{@render children()}</main>
+</div>
 
 <style>
 	.app {

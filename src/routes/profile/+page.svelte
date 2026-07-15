@@ -2,6 +2,7 @@
   import { onMount } from "svelte";
   import { createPortfolio, listPortfolios, renamePortfolio, deletePortfolio, changePortfolioBaseCurrency } from "$lib/api/portfolio";
   import type { Portfolio } from "$lib/api/portfolio";
+    import { goto } from "$app/navigation";
 
   let portfolios = $state<Portfolio[]>([]);
 
@@ -45,89 +46,47 @@
   onMount(loadPortfolios);
 </script>
 
-<main class="container">
-
-  <h1>Profile</h1>
-  <h2>Manage Portfolios</h2>
-  <section>
-    <a href="/portfolio/create">Create Portfolio</a>
-  </section>
-  
-  <section>
-    <h2>Portfolios</h2>
-    <table>
+<div class="card w-full preset-filled-surface-500 p-4">
+  <h1 class="h1 text-center">Profile</h1>
+</div>
+<section>
+  <div class="mt-8 mb-4 flex flex-row justify-between">
+    <h3 class="h3">Portfolios</h3>
+    <a href="/portfolio/create" class="btn preset-filled-primary-500">Create Portfolio</a>
+    <!-- <button type="button" class="btn preset-filled-primary-500" onclick={() => goto("/portfolio/create")}>Create Portfolio</button> -->
+  </div>
+  <div class="table-wrap">
+    <table class="table table-auto">
 
       <thead>
         <tr>
           <th>Name</th>
           <th>Base Currency</th>
           <th>Created At</th>
-          <th>Actions</th>
+          <th>Updated At</th>
+          <th class="text-center!">Actions</th>
         </tr>
       </thead>
 
-      <tbody>
+      <tbody class="[&>tr]:hover:preset-tonal-primary">
         {#each portfolios as portfolio}
           <tr>
             <td>{portfolio.name}</td>
             <td>{portfolio.baseCurrency}</td>
             <td>{portfolio.createdAt}</td>
+            <td>{portfolio.updatedAt}</td>
             <td>
-              <a href={`/portfolio/${portfolio.id}`}>Manage</a>
-              <button onclick={() => handleDeletePortfolio(portfolio.id)}>Delete</button>
+              <div class="flex flex-row justify-center gap-2">
+              <a href={`/portfolio/${portfolio.id}`} class="btn preset-filled-primary-500">Manage</a>
+              <!-- <button type="button" class="btn preset-filled-primary-500" onclick={() => goto(`/portfolio/${portfolio.id}`)}>Manage</button> -->
+              <button type="button" class="btn preset-filled-error-500" onclick={() => handleDeletePortfolio(portfolio.id)}>Delete</button>
+              </div>
             </td>
           </tr>
           
         {/each}
       </tbody>
     </table>
-  </section>
+  </div>
+</section>
 
-</main>
-
-<style>
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  text-align: center;
-}
-
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-button {
-  cursor: pointer;
-}
-
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
-}
-</style>
