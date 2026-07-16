@@ -42,72 +42,34 @@
     } )
 </script>
 
-<h1>Edit Portfolio</h1>
+<div class="card w-full preset-filled-surface-500 p-4">
+  <h3 class="h3">Edit Portfolio</h3>
+</div>
 
-<p>Edit investment portfolio</p>
-<section>
-<form onsubmit={handlePortfolioEdit}>
-    <label>
-        Name
-        <input bind:value={portfolioName} required>
-    </label>
+<section class="card mt-6 w-full p-6">
+  <form onsubmit={handlePortfolioEdit}>
+    <fieldset class="flex flex-col gap-2">
+      <label class="label">
+          <span class="label-text">Name</span> 
+          <input class="input" type="text" bind:value={portfolioName} required>
+      </label>
 
-    <label>
-        Base Currency
-        <input bind:value={baseCurrency} maxlength="3">
-    </label>
-
-    <button type="submit">Edit Portfolio</button>
-    <a href="/profile">Cancel</a>
-</form>
-{#if error}
-    <p>{error}</p>
-{/if}
+      <label class="label">
+          <span class="label-text">Base Currency</span> 
+          <input class="input" type="text" bind:value={baseCurrency} maxlength="3" required>
+      </label>
+    </fieldset>
+    <fieldset class="flex justify-end gap-2 mt-4">
+      <button type="submit" class="btn preset-filled-primary-500">Edit Portfolio</button>
+      <a href="/profile" class="btn preset-filled-error-500">Cancel</a>
+    </fieldset>
+  </form>
+  {#if error}
+      <div class="card preset-outlined-error-500 grid grid-cols-1 items-center gap-4 p-4 lg:grid-cols-[auto_1fr_auto] mt-4">
+      <div>
+        <p class="font-bold">Error</p>
+        <p class="text-xs opacity-60">{error}</p>
+      </div>
+    </div>
+  {/if}
 </section>
-
-<style>
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  text-align: center;
-}
-
-input,
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  color: #0f0f0f;
-  background-color: #ffffff;
-  transition: border-color 0.25s;
-  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-}
-
-button {
-  cursor: pointer;
-}
-
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
-}
-</style>

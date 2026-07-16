@@ -6,20 +6,16 @@
 </script>
 
 <!-- {@render children()} -->
-
 <div class="app">
 	<Sidebar />
-
-	<main>
-		{@render children()}
-	</main>
+	<main>{@render children()}</main>
 </div>
 
 <style>
 	.app {
-    display: grid;
-    grid-template-columns: 240px 1fr;
-    height: 100vh;
+		display: grid;
+		grid-template-columns: 240px 1fr;
+		height: 100vh;
 	}
 
 	main {
