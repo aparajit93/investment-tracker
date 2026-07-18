@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Navigation } from '@skeletonlabs/skeleton-svelte';
+    import { currentPortfolioState } from '$lib/state.svelte';
     const sidebarLinks = [
         {label: "Dashboard", href: "/"},
         {label: "Accounts", href: "/"},
@@ -74,6 +75,9 @@
             </Navigation.Menu>
 		</Navigation.Content>
 		<Navigation.Footer>
+            <Navigation.TriggerText>
+                {currentPortfolioState.id ?? "No Portfolio"}
+            </Navigation.TriggerText>
 			<Navigation.TriggerAnchor href="/profile" title="Profile" aria-label="Profile">
 				<Navigation.TriggerText>Profile</Navigation.TriggerText>
 			</Navigation.TriggerAnchor>
