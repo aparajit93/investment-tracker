@@ -2,7 +2,8 @@
   import { onMount } from "svelte";
   import { createPortfolio, listPortfolios, renamePortfolio, deletePortfolio, changePortfolioBaseCurrency } from "$lib/api/portfolio";
   import type { Portfolio } from "$lib/api/portfolio";
-    import { goto } from "$app/navigation";
+  import { goto } from "$app/navigation";
+  import { currentPortfolioState } from "$lib/state.svelte";
 
   let portfolios = $state<Portfolio[]>([]);
 
@@ -43,6 +44,10 @@
     await loadPortfolios();
   }
 
+  async function handleSwitchActivePortfolio(id:string) {
+    currentPortfolioState.id = id;
+  }
+
   onMount(loadPortfolios);
 </script>
 
@@ -79,6 +84,7 @@
               <div class="flex flex-row justify-center gap-2">
               <a href={`/portfolio/${portfolio.id}`} class="btn preset-filled-primary-500">Manage</a>
               <!-- <button type="button" class="btn preset-filled-primary-500" onclick={() => goto(`/portfolio/${portfolio.id}`)}>Manage</button> -->
+              <button type="button" class="btn preset-filled-secondary-500" onclick={() => handleSwitchActivePortfolio(portfolio.id)}>Set Active</button>
               <button type="button" class="btn preset-filled-error-500" onclick={() => handleDeletePortfolio(portfolio.id)}>Delete</button>
               </div>
             </td>
