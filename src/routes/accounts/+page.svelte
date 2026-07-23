@@ -48,6 +48,7 @@
               <th>Currency</th>
               <th>Created At</th>
               <th>Updated At</th>
+              <th>Actions</th>
             </tr>
           </thead>
 
@@ -62,6 +63,7 @@
                 <td>{account.updatedAt}</td>
                 <td>
                   <div class="flex flex-row justify-center gap-2">
+                    <a href={`/account/${account.id}`} class="btn preset-filled-primary-500">Manage</a>
                   </div>
                 </td>
               </tr>         
