@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { currentPortfolioState } from "$lib/state.svelte";
-  import { listAccounts } from "$lib/api/account";
+  import { deleteAccount, listAccounts } from "$lib/api/account";
   import type { Account } from "$lib/api/account";
 
   let accounts = $state<Account[]>([]);
@@ -15,6 +15,16 @@
     }
 
     accounts = await listAccounts(id);
+  }
+
+  async function handleAccountDelete(id: string) {
+    if (accounts.length == 0) {
+      return;
+    }
+
+    await deleteAccount(id);
+
+    await loadAccounts(currentPortfolioState.id);
   }
 
   $effect(() => {
@@ -64,6 +74,7 @@
                 <td>
                   <div class="flex flex-row justify-center gap-2">
                     <a href={`/account/${account.id}`} class="btn preset-filled-primary-500">Manage</a>
+                    <button type="button" class="btn preset-filled-error-500" onclick={() => handleAccountDelete(account.id)}>Delete</button>
                   </div>
                 </td>
               </tr>         

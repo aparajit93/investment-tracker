@@ -2,7 +2,7 @@
     import { goto } from '$app/navigation';
     import { page } from '$app/state';
     import { onMount } from 'svelte';
-    import { AccountType, changeAccountCurrency, changeAccountInstitution, changeAccountType, renameAccount } from '$lib/api/account';
+    import { AccountType, activateAccount, changeAccountCurrency, changeAccountInstitution, changeAccountType, deactivateAccount, renameAccount } from '$lib/api/account';
     import { getAccount } from '$lib/api/account';
 
     const id = page.params.id!;
@@ -11,6 +11,7 @@
     let currency = $state("");
     let institution = $state("") as string|null;
     let accountType = $state<AccountType>(AccountType.Brokerage);
+    let isActive = $state(false);
 
     let error = $state("");
 
@@ -48,6 +49,21 @@
 
     }
 
+    async function handleAccountActivationToggle() {
+        error = "";
+        try {
+            if (isActive) {
+                await deactivateAccount(id);
+                isActive = false;
+            } else {
+                await activateAccount(id);
+                isActive = true;
+            }
+        } catch (err) {
+            error = String(err);
+        }
+    }
+
     onMount(async () => {
         const account = await getAccount(id);
 
@@ -55,6 +71,7 @@
         currency = account.currency;
         institution = account.institution;
         accountType = account.accountType;
+        isActive = account.isActive;
     } )
 </script>
 
@@ -90,9 +107,12 @@
           </select>
       </label>
     </fieldset>
-    <fieldset class="flex justify-end gap-2 mt-4">
+    <fieldset class="flex justify-between mt-4">
+      <button type="button" class="btn preset-filled-secondary-500" onclick={handleAccountActivationToggle}>{isActive? "Deactivate" : "Activate"}</button>
+      <div class="flex gap-2">
       <button type="submit" class="btn preset-filled-primary-500">Edit Account</button>
       <a href="/accounts" class="btn preset-filled-error-500">Cancel</a>
+      </div>
     </fieldset>
   </form>
   {#if error}
