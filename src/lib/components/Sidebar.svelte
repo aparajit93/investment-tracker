@@ -3,7 +3,7 @@
     import { currentPortfolioState } from '$lib/state.svelte';
     const sidebarLinks = [
         {label: "Dashboard", href: "/"},
-        {label: "Accounts", href: "/"},
+        {label: "Accounts", href: "/accounts"},
         {label: "Assets", href: "/"}
     ];
 </script>

@@ -22,7 +22,7 @@ export interface Account {
 export interface CreateAccountRequest {
     portfolioId: string;
     name: string;
-    institution: string;
+    institution: string|null;
     accountType: AccountType;
     currency: string;
 }
@@ -39,7 +39,7 @@ export interface ChangeAccountCurrencyRequest {
 
 export interface ChangeAccountInstitutionRequest {
     id: string;
-    institution: string;
+    institution: string|null;
 }
 
 export interface ChangeAccountTypeRequest {
@@ -87,4 +87,8 @@ export async function deactivateAccount(id:string) {
 
 export async function deleteAccount(id:string) {
     await invoke("delete_account", { id });
+}
+
+export async function getAccount(id:string) {
+    return await invoke<Account>("get_account",{ id });
 }

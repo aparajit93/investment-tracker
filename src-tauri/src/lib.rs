@@ -36,7 +36,8 @@ pub fn run() {
             commands::account::change_account_type,
             commands::account::activate_account,
             commands::account::deactivate_account,
-            commands::account::delete_account
+            commands::account::delete_account,
+            commands::account::get_account
         ])
         .setup(|app| {
             let app_handle = app.handle().clone();

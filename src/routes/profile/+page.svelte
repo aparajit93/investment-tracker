@@ -15,6 +15,15 @@
 
   async function loadPortfolios() {
     portfolios = await listPortfolios();
+
+    if (portfolios.length === 0) {
+      currentPortfolioState.id = null;
+      return
+    }
+
+    if (currentPortfolioState.id === null || !portfolios.some(portfolio => portfolio.id === currentPortfolioState.id)) {
+      currentPortfolioState.id = portfolios[0].id;
+    }
   }
 
   async function handlePortfolioSubmit(event:SubmitEvent) {

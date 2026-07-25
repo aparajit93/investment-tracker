@@ -198,3 +198,15 @@ pub async fn delete_account(state: State<'_, AppState>, id: String) -> Result<()
         })?;
     Ok(())
 }
+
+#[tauri::command]
+pub async fn get_account(state: State<'_, AppState>, id: String) -> Result<Account, String> {
+    let account = repositories::account::get_by_id(&state.db, &id)
+    .await
+    .map_err(|e| match e {
+                RepositoryError::NotFound => "Account Not Found".to_string(),
+                RepositoryError::Database(err) => err.to_string(),
+            })?;
+    
+  Ok(account)
+}
