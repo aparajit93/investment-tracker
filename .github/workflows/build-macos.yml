@@ -1,0 +1,35 @@
+name: Build MacOS
+
+on: 
+    workflow_dispatch:
+
+jobs: 
+    build-macos:
+        runs-on: macos-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup Deno
+              uses: denoland/setup-deno@v2
+              with: 
+                deno-version: v2.x
+            
+            - name: Setup Rust
+              uses: dtolnay/rust-toolchain@stable
+
+            - name: Install Dependencies
+              run: deno install --frozen
+            
+            - name: Build Tauri application
+              run: deno task tauri build
+
+            - name: Upload MacOS bundles
+              uses: actions/upload-artifact@v4
+              with:
+                name: windows-installers
+                path: |
+                    src-tauri/target/release/bundle/dmg/*.dmg
+                    src-tauri/target/release/bundle/macos/*.app
+            
