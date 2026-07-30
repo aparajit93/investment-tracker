@@ -91,9 +91,9 @@ pub async fn delete_portfolio(state: State<'_, AppState>, id: String) -> Result<
 
 #[tauri::command]
 pub async fn get_portfolio(state: State<'_, AppState>, id: String) -> Result<Portfolio, String> {
-  let portfolio = repositories::portfolio::get_by_id(&state.db, &id)
-  .await
-  .map_err(|e| match e {
+    let portfolio = repositories::portfolio::get_by_id(&state.db, &id)
+        .await
+        .map_err(|e| match e {
             RepositoryError::NotFound => "Portfolio Not Found".to_string(),
             RepositoryError::Database(err) => err.to_string(),
         })?;

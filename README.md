@@ -1,6 +1,7 @@
 # Investment Tracker
 
-A local-first desktop application for tracking personal investments and financial accounts.
+A local-first desktop application for tracking personal investments and
+financial accounts.
 
 ## Features
 
@@ -29,7 +30,6 @@ The following functionality is planned:
 - Application onboarding
 - Persistent current-portfolio context
 
-
 ## Tech Stack
 
 - Tauri v2
@@ -42,10 +42,12 @@ The following functionality is planned:
 
 ## Recommended IDE Setup
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+[VS Code](https://code.visualstudio.com/) +
+[Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) +
+[Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) +
+[rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
 
 ## Development
-
 
 ### Prerequisites
 
@@ -81,9 +83,7 @@ Create a production build:
 deno task tauri build
 ```
 
-
 ## Project Structure
-
 
 ```text
 .  
@@ -96,7 +96,7 @@ deno task tauri build
     │   ├── commnads/ # Tauri commands  
     │   ├── repositories/ # SQL operations  
     │   ├── models/ # Data models  
-    └── migrations/ # SQLx database migrations   
+    └── migrations/ # SQLx database migrations
 ```
 
 ## Roadmap

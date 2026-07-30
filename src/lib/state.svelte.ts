@@ -1,5 +1,5 @@
 export const currentPortfolioState = $state(
-    {
-        id: null as string|null
-    }
+  {
+    id: null as string | null,
+  },
 );
