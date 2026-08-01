@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { Button, ButtonGroup } from "flowbite-svelte";
   import { currentPortfolioState } from "$lib/state.svelte";
   import { deleteAccount, listAccounts } from "$lib/api/account";
   import type { Account } from "$lib/api/account";
@@ -43,8 +44,8 @@
   <section>
     <div class="mt-8 mb-4 flex flex-row justify-between">
       <h3 class="h3">Accounts</h3>
-      <a href="/account/create" class="btn preset-filled-primary-500">Create Account</a>
-      <!-- <button type="button" class="btn preset-filled-primary-500" onclick={() => goto("/portfolio/create")}>Create Portfolio</button> -->
+      <!-- <a href="/account/create" class="btn preset-filled-primary-500">Create Account</a> -->
+      <Button href = "/account/create" color="blue">Create Account</Button>
     </div>
     {#if accounts.length > 0}
       <div class="table-wrap">
@@ -73,8 +74,12 @@
                 <td>{account.updatedAt}</td>
                 <td>
                   <div class="flex flex-row justify-center gap-2">
-                    <a href={`/account/${account.id}`} class="btn preset-filled-primary-500">Manage</a>
-                    <button type="button" class="btn preset-filled-error-500" onclick={() => handleAccountDelete(account.id)}>Delete</button>
+                    <!-- <a href={`/account/${account.id}`} class="btn preset-filled-primary-500">Manage</a>
+                    <button type="button" class="btn preset-filled-error-500" onclick={() => handleAccountDelete(account.id)}>Delete</button> -->
+                    <!-- <ButtonGroup> -->
+                      <Button href={`/account/${account.id}`} color="blue">Manage</Button>
+                      <Button color="red" onclick={() => handleAccountDelete(account.id)}>Delete</Button>
+                    <!-- </ButtonGroup> -->
                   </div>
                 </td>
               </tr>         
