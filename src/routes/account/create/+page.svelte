@@ -3,6 +3,7 @@
     import { AccountType } from "$lib/api/account";
     import { currentPortfolioState } from "$lib/state.svelte";
     import { goto } from "$app/navigation";
+    import { Label, Input, Select, Alert } from "flowbite-svelte";
 
     let accountName = $state("");
     let currency = $state("USD");
@@ -43,17 +44,17 @@
 
 <section class="card mt-6 w-full p-6">
   <form onsubmit={handleAccountSubmit}>
-    <fieldset class="flex flex-col gap-2">
-      <label class="label">
-          <span class="label-text">Name</span> 
-          <input class="input" type="text" bind:value={accountName} required>
-      </label>
+    <div class="flex flex-col gap-2">
+      <div>
+          <Label>Name</Label> 
+          <Input type="text" bind:value={accountName} required />
+      </div>
 
-      <label class="label">
-          <span class="label-text">Currency</span> 
-          <input class="input" type="text" bind:value={currency} maxlength="3" required>
-      </label>
-    </fieldset>
+      <div>
+          <Label>Currency</Label> 
+          <Input type="text" bind:value={currency} required maxlength = {3}/>
+      </div>
+    </div>
     <fieldset class="flex flex-col gap-2">
       <label class="label">
           <span class="label-text">Institution</span> 
@@ -62,11 +63,16 @@
 
       <label class="label">
           <span class="label-text">Account Type</span> 
-          <select class="select" bind:value={accountType} required>
+          <!-- <select class="select" bind:value={accountType} required>
             {#each Object.values(AccountType) as type}
                 <option value={type}>{type}</option>
             {/each}
-          </select>
+          </select> -->
+          <Select bind:value={accountType} required>
+            {#each Object.values(AccountType) as type}
+                <option value={type}>{type}</option>
+            {/each}
+          </Select>
       </label>
     </fieldset>
     <fieldset class="flex justify-end gap-2 mt-4">
@@ -75,11 +81,9 @@
     </fieldset>
   </form>
   {#if error}
-      <div class="card preset-outlined-error-500 grid grid-cols-1 items-center gap-4 p-4 lg:grid-cols-[auto_1fr_auto] mt-4">
-      <div>
-        <p class="font-bold">Error</p>
-        <p class="text-xs opacity-60">{error}</p>
-      </div>
-    </div>
+      <Alert color="red" class="mt-2">
+        <span class="font-medium">Error:</span>
+        {error}
+      </Alert>
   {/if}
 </section>
