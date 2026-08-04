@@ -6,9 +6,9 @@
 </script>
 
 <!-- {@render children()} -->
-<div class="app w-full h-screen grid grid-cols-[auto_1fr] items-stretch border border-surface-200-800">
+<div class="app w-full h-full grid grid-cols-[auto_1fr] items-stretch border border-surface-200-800">
 	<Sidebar />
-	<main>{@render children()}</main>
+	<main  class="overflow-auto md:ml-64">{@render children()}</main>
 </div>
 
 <style>
