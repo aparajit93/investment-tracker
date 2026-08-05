@@ -3,6 +3,7 @@
   import { currentPortfolioState } from "$lib/state.svelte";
   import { deleteAccount, listAccounts } from "$lib/api/account";
   import type { Account } from "$lib/api/account";
+  import { Button } from "$lib/components/ui/button/index"
 
   let accounts = $state<Account[]>([]);
   let error = $state("");
@@ -43,7 +44,7 @@
   <section>
     <div class="mt-8 mb-4 flex flex-row justify-between">
       <h3 class="h3">Accounts</h3>
-      <a href="/account/create" class="btn preset-filled-primary-500">Create Account</a>
+      <Button href="/account/create">Create Account</Button>
       <!-- <button type="button" class="btn preset-filled-primary-500" onclick={() => goto("/portfolio/create")}>Create Portfolio</button> -->
     </div>
     {#if accounts.length > 0}
