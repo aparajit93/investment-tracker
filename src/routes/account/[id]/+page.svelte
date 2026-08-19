@@ -4,6 +4,8 @@
     import { onMount } from 'svelte';
     import { AccountType, activateAccount, changeAccountCurrency, changeAccountInstitution, changeAccountType, deactivateAccount, renameAccount } from '$lib/api/account';
     import { getAccount } from '$lib/api/account';
+    import Label from '$lib/components/ui/label/label.svelte';
+    import Input from '$lib/components/ui/input/input.svelte';
 
     const id = page.params.id!;
 
@@ -81,18 +83,18 @@
 
 <section class="card mt-6 w-full p-6">
   <form onsubmit={handleAccountEdit}>
-    <fieldset class="flex flex-col gap-2">
-      <label class="label">
-          <span class="label-text">Name</span> 
-          <input class="input" type="text" bind:value={accountName} required>
-      </label>
+    <div class="flex flex-col gap-2">
+      <div>
+          <Label>Name</Label>
+          <Input type="text" bind:value={accountName} required />
+      </div>
 
-      <label class="label">
-          <span class="label-text">Currency</span> 
-          <input class="input" type="text" bind:value={currency} maxlength="3" required>
-      </label>
-    </fieldset>
-    <fieldset class="flex flex-col gap-2">
+      <div>
+          <Label>Currency</Label> 
+          <Input type="text" bind:value={currency} maxlength = {3} required />
+      </div>
+    </div>
+    <div class="flex flex-col gap-2">
       <label class="label">
           <span class="label-text">Institution</span> 
           <input class="input" type="text" bind:value={institution}>
@@ -106,7 +108,7 @@
             {/each}
           </select>
       </label>
-    </fieldset>
+    </div>
     <fieldset class="flex justify-between mt-4">
       <button type="button" class="btn preset-filled-secondary-500" onclick={handleAccountActivationToggle}>{isActive? "Deactivate" : "Activate"}</button>
       <div class="flex gap-2">
