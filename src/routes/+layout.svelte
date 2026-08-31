@@ -1,15 +1,21 @@
 <script lang="ts">
+    import AppSidebar from '$lib/components/AppSidebar.svelte';
+    import * as Sidebar from '$lib/components/ui/sidebar/index';
 	import './layout.css';
-	import Sidebar from '$lib/components/Sidebar.svelte';
 
 	const { children } = $props();
 </script>
 
 <!-- {@render children()} -->
-<div class="app w-full h-screen grid grid-cols-[auto_1fr] items-stretch border border-surface-200-800">
+<!-- <div class="app w-full h-screen grid grid-cols-[auto_1fr] items-stretch border border-surface-200-800">
 	<Sidebar />
 	<main>{@render children()}</main>
-</div>
+</div> -->
+
+<Sidebar.Provider>
+	<AppSidebar />
+		<main>{@render children()}</main>
+</Sidebar.Provider>
 
 <style>
 	/* .app {
